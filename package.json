@@ -1,0 +1,34 @@
+{
+  "name": "abigail.device",
+  "version": "0.0.1",
+  "description": "Device-based functionality for Project Abigail",
+  "main": "index.js",
+  "scripts": {
+    "forever": "forever start index.js",
+    "forever-stop": "forever stop index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mozilla/abigail-device.git"
+  },
+  "author": "Russ Nicoletti<rnicoletti@mozilla.com>",
+  "license": "MPL-2.0",
+  "bugs": {
+    "url": "https://github.com/mozilla/abigail-device/issues"
+  },
+  "homepage": "https://github.com/mozilla/abigail-device#README",
+  "dependencies": {
+    "url": "^0.11.0",
+    "memorystream": "0.3.1",
+    "ws": "^1.1.0",
+    "cd-metrics": "latest",
+    "concat-stream": "1.5.1",
+    "mic": "2.0.1",
+    "pocketsphinx": "5.0.5",
+    "which": "1.2.9",
+    "getmac": "1.2.1",
+    "nascent-ledbar": "https://github.com/mozilla/nascent-ledbar",
+    "commander": "2.9.0"
+  }
+}
