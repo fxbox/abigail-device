@@ -30,7 +30,7 @@ rm -r cmake-3.6.0 cmake-3.6.0.tar.gz
 
 # Get Mozilla's version of sphinxbase and build it
 echo Get Mozilla\'s version of sphinxbase and build it
-$ git clone https://github.com/mozilla/sphinxbase.git
+git clone https://github.com/mozilla/sphinxbase.git
 cd sphinxbase
 ./autogen.sh
 make
@@ -39,7 +39,7 @@ cd ..
 
 # Get Mozilla's version of pocketsphinx and build it
 echo Get Mozilla\'s version of pocketsphinx and build it
-$ git clone https://github.com/mozilla/pocketsphinx.git
+git clone https://github.com/mozilla/pocketsphinx.git
 cd pocketsphinx
 ./autogen.sh
 make
@@ -49,13 +49,17 @@ cd ..
 # Install a recent version of node and npm.
 # See https://nodejs.org/en/download/ for latest stable ARM download link
 echo Install a recent version of node and npm.
-$ wget https://nodejs.org/dist/v4.4.7/node-v4.4.7-linux-armv7l.tar.xz
-$ tar xf node-v4.4.7-linux-armv7l.tar.xz
-$ cd node-v4.4.7-linux-armv7l/
-$ sudo cp -R bin include lib share /usr/local/
-$ cd ..
-$ rm -r node-v4.4.7-linux-armv7l node-v4.4.7-linux-armv7l.tar.xz
+wget https://nodejs.org/dist/v4.4.7/node-v4.4.7-linux-armv7l.tar.xz
+tar xf node-v4.4.7-linux-armv7l.tar.xz
+cd node-v4.4.7-linux-armv7l/
+sudo cp -R bin include lib share /usr/local/
+cd ..
+rm -r node-v4.4.7-linux-armv7l node-v4.4.7-linux-armv7l.tar.xz
 
 # Install node bindings for cmake
 echo Install node bindings for cmake
-$ sudo npm install -g cmake-js
+sudo npm install -g cmake-js
+
+# Configure abigail-device service
+sudo cp config-files/abigail-device.service /lib/systemd/system
+sudo mkdir /lib/systemd/system/abigail-device.service.d
