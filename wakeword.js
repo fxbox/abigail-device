@@ -398,7 +398,6 @@ module.exports = {
                 throw err;
             }
             var sensor = MPU6050(i2c1, address);
-            console.log('created sensor');
 
             (function read() {
                 sensor.read(function(err, sensorData) {
@@ -406,7 +405,7 @@ module.exports = {
                     if (Math.abs(sensorData.accel.x) > sensitivity ||
                         Math.abs(sensorData.accel.y) > sensitivity ||
                         Math.abs(sensorData.accel.z) > sensitivity) {
-                           console.log('calling callback');
+                           console.log('Detected Motion');
                            callback();
                     } else {   
                         read();
