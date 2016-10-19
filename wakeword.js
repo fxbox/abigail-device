@@ -305,8 +305,7 @@ module.exports = {
                 break;
 
             case stateEnum.STREAMING:
-                if (this.detected /*&& this.detected.length > 0*/) {
-                    //this.decoder.startUtt();
+                if (this.detected) {
                     this.detected = null;
                 }
                 break;
