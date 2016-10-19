@@ -1,0 +1,34 @@
+language: node_js
+
+node_js:
+- "5"
+env:
+  - CXX=g++-4.8
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-4.8
+install:
+- wget http://downloads.sourceforge.net/swig/swig-3.0.10.tar.gz 
+- tar xvfz swig-3.0.10.tar.gz
+- cd swig-3.0.10
+- ./configure --prefix=/usr --without-clisp --without-maximum-compile-warnings && make
+- sudo make install 
+- cd ..
+- git clone https://github.com/mozilla/sphinxbase
+- cd sphinxbase
+- ./autogen.sh
+- ./configure
+- make
+- sudo make install
+- cd ..
+- git clone https://github.com/mozilla/pocketsphinx
+- cd pocketsphinx
+- ./autogen.sh
+- ./configure
+- make
+- sudo make install
+- cd ..
+- npm install

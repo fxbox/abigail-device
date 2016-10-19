@@ -5,6 +5,10 @@ const Mic = require('mic');
 const Path = require('path');
 const PocketSphinx = require('pocketsphinx').ps;
 const Which = require('which');
+var MPU6050 = require('i2c-mpu6050');
+var i2c = require('i2c-bus');
+var sensitivity = 1.5;
+var address = 0x68;
 
 const stateEnum = {
     STOPPED: 'stopped',
@@ -54,8 +58,6 @@ module.exports = {
      * @readonly
      */
     state: stateEnum.STOPPED,
-
-    lastScore: null,
 
     // Private properties.
     sphinxConfig: null,
@@ -230,26 +232,15 @@ module.exports = {
                 this.decoder.startUtt();
                 onready();
                 this.state = stateEnum.PRELISTEN;
+                var self = this;
                 this.record(data => {
-                    if (!this.detected) {
-                        this.decoder.processRaw(data, false, false);
-
-                        var now = Date.now();
-                        var hyp = this.decoder.hyp();
-                        if (hyp && hyp.hypstr) {
-                            this.decoder.endUtt();
-                            if (this._checkScore(scoreThreshold)) {
-                                this.logging.addmetric("wakeword", "spot", "ok_score", this.lastScore);
-                                this.detected = hyp.hypstr;
-                                this.state = stateEnum.STREAMING;
-                            } else {
-                                this.logging.addmetric("wakeword", "spot", "low_score", this.lastScore);
-                                this.decoder.startUtt();
-                            }
-                        }
+                    if(!self.detected) {
+                        self.detectMotion(function() {
+                            self.detected = true;
+                            self.state = stateEnum.STREAMING;
+                        });
                         return;
                     }
-
                     onwake(data, this.detected);
                 });
             };
@@ -284,16 +275,6 @@ module.exports = {
         });
     },
 
-    _checkScore: function(threshold) {
-        var seg = this.decoder.seg().iter().next();
-        if (!seg) {
-            return false;
-        }
-        this.lastScore = this.decoder.getLogmath().exp(seg.prob);
-        console.log("Kws Score:", this.lastScore);
-        return this.decoder.getLogmath().exp(seg.prob) >= threshold;
-    },
-
     /**
      * Pauses microphone recording.
      */
@@ -324,8 +305,7 @@ module.exports = {
                 break;
 
             case stateEnum.STREAMING:
-                if (this.detected && this.detected.length > 0) {
-                    this.decoder.startUtt();
+                if (this.detected) {
                     this.detected = null;
                 }
                 break;
@@ -405,5 +385,34 @@ module.exports = {
         }
         this.detected = null;
         this.state = stateEnum.STOPPED;
+    },
+    
+    /**
+     * Reads from the accelerometer and calls a callback when the accelerometer value
+     * is over the sensitivity threshhold.
+     */
+    detectMotion: function(callback) {
+        var i2c1 = i2c.open(1, function(err) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            var sensor = MPU6050(i2c1, address);
+            console.log('created sensor');
+
+            (function read() {
+                sensor.read(function(err, sensorData) {
+                    if (err) throw err;
+                    if (Math.abs(sensorData.accel.x) > sensitivity ||
+                        Math.abs(sensorData.accel.y) > sensitivity ||
+                        Math.abs(sensorData.accel.z) > sensitivity) {
+                           console.log('calling callback');
+                           callback();
+                    } else {   
+                        read();
+                    }
+                });
+            }());
+        });
     }
 };

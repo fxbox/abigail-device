@@ -1,4 +1,4 @@
-# abigail-device
+# abigail-device [![Build Status](https://travis-ci.org/project-abigail/abigail-device.svg?branch=master)](https://travis-ci.or    g/project-abigail/abigail-device)
 
 Abigail client
 --------------
