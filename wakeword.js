@@ -5,10 +5,7 @@ const Mic = require('mic');
 const Path = require('path');
 const PocketSphinx = require('pocketsphinx').ps;
 const Which = require('which');
-var MPU6050 = require('i2c-mpu6050');
-var i2c = require('i2c-bus');
-var sensitivity = 1.5;
-var address = 0x68;
+const child_process = require('child_process');
 
 const stateEnum = {
     STOPPED: 'stopped',
@@ -233,14 +230,26 @@ module.exports = {
                 onready();
                 this.state = stateEnum.PRELISTEN;
                 var self = this;
+                var child = null;
                 this.record(data => {
                     if(!self.detected) {
-                        self.detectMotion(function() {
-                            self.detected = true;
-                            self.state = stateEnum.STREAMING;
-                        });
+                        if (child == null) {
+                            // Launch the accelerometer in another process to allow the audio 
+                            // streaming to be uninterrupted.  When the callback is called, 
+                            // that means motion was detected.
+                            child = child_process.exec('node accel.js',  (error, stdout, stderr) => {
+                                if (error) {
+                                    console.error('exec error: ${error}');
+                                    return;
+                                }
+
+                                self.detected = true;
+                                self.state = stateEnum.STREAMING;
+                                child = null;
+                            });
+                        } 
                         return;
-                    }
+                    } 
                     onwake(data, this.detected);
                 });
             };
@@ -385,33 +394,5 @@ module.exports = {
         }
         this.detected = null;
         this.state = stateEnum.STOPPED;
-    },
-    
-    /**
-     * Reads from the accelerometer and calls a callback when the accelerometer value
-     * is over the sensitivity threshhold.
-     */
-    detectMotion: function(callback) {
-        var i2c1 = i2c.open(1, function(err) {
-            if (err) {
-                console.log(err);
-                throw err;
-            }
-            var sensor = MPU6050(i2c1, address);
-
-            (function read() {
-                sensor.read(function(err, sensorData) {
-                    if (err) throw err;
-                    if (Math.abs(sensorData.accel.x) > sensitivity ||
-                        Math.abs(sensorData.accel.y) > sensitivity ||
-                        Math.abs(sensorData.accel.z) > sensitivity) {
-                           console.log('Detected Motion');
-                           callback();
-                    } else {   
-                        read();
-                    }
-                });
-            }());
-        });
     }
 };
