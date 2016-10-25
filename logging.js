@@ -25,11 +25,11 @@ module.exports = {
         this.clientId = clientId;
 
         this.options = {
-            locale: 'pt-br',
-            os: 'osx',
-            os_version: 'elcapitan',
-            device: 'pc',
-            app_name: 'vaani-test',
+            locale: 'en-us',
+            os: 'raspbian',
+            os_version: 'jessie',
+            device: 'rpi',
+            app_name: 'abigail',
             app_version: '0.1',
             app_update_channel: 'develop',
             app_build_id: '0.1',
