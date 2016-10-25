@@ -102,14 +102,17 @@ module.exports =  {
     playresponse: function(){
         this.microphone.pause();
         // we check if the file is empty. if is, we play the sorry message
-        if (fs.statSync('output.wav').size === 0)
+        if (fs.statSync('output.wav').size === 0) {
             this.playaudio('resources/error.wav');
-        else
+            this.logging.addmetric("tts", "play", "error", -1);
+        }
+        else {
             this.playaudio('output.wav');
+            this.logging.addmetric("tts", "play", "ok", 1);
+        }
         this.microphone.resume();
         this.wakeword.resume();
         leds.listening();
-        this.logging.addmetric("tts", "play", "ok", 1);
     },
 
     playerror: function(){
