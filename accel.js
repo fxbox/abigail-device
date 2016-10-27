@@ -6,8 +6,13 @@
 
 var MPU6050 = require('i2c-mpu6050');
 var i2c = require('i2c-bus');
-var sensitivity = 1.5;
+var nconf = require('nconf');
 var address = 0x68;
+
+// Use nconf to get the sensitivity for the accelerometer..
+nconf.argv()
+   .env()
+.file({ file: __dirname + '/config.json' });
 
 
 /**
@@ -20,6 +25,7 @@ var address = 0x68;
 function listen() {
     var i2c1 = i2c.openSync(1);
     var sensor = new MPU6050(i2c1, address);
+    var sensitivity = nconf.get('accelsensitivity');
     while(true) {
         var sensorData = sensor.readSync();
         if (Math.abs(sensorData.accel.x) > sensitivity ||
