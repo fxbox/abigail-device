@@ -61,5 +61,4 @@ echo Install node bindings for cmake
 sudo npm install -g cmake-js
 
 # Configure abigail-device service
-sudo cp config-files/abigail-device.service /lib/systemd/system
-sudo mkdir /lib/systemd/system/abigail-device.service.d
+sudo cp abigail-device/config-files/abigail-device.service /lib/systemd/system
