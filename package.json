@@ -32,6 +32,7 @@
     "nascent-ledbar": "https://github.com/mozilla/nascent-ledbar",
     "commander": "2.9.0",
     "i2c-mpu6050": "2.2.1",
-    "i2c-bus": "1.1.2"
+    "i2c-bus": "1.1.2",
+    "nconf" : "0.8.4"
   }
 }
