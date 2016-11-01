@@ -55,8 +55,13 @@ $ npm install
 Note that the `npm install` step will fail if you have not first
 installed the prerequsites.
 
+
+
 Starting and Stopping Abigail Device
 ------------------------------------
+
+Before running the client, rename the config.json.tpl to config.json
+and modify the IP of the server to an instance of the abigail voice-server.
 
 To run the client once, just to try it out:
 
