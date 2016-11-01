@@ -25,7 +25,7 @@ nconf.argv()
 function listen() {
     var i2c1 = i2c.openSync(1);
     var sensor = new MPU6050(i2c1, address);
-    var sensitivity = nconf.get('accelsensitivity');
+    var sensitivity = nconf.get('sensitivity');
     while(true) {
         var sensorData = sensor.readSync();
         if (Math.abs(sensorData.accel.x) > sensitivity ||
