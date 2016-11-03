@@ -1,4 +1,5 @@
 #!/bin/bash
+mydir=$(dirname $0)
 
 # install the various packages and build tools we'll need
 echo install the various packages and build tools well need
@@ -61,4 +62,4 @@ echo Install node bindings for cmake
 sudo npm install -g cmake-js
 
 # Configure abigail-device service
-sudo cp abigail-device/config-files/abigail-device.service /lib/systemd/system
+sudo cp $mydir/config-files/abigail-device.service /lib/systemd/system
