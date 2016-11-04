@@ -1,5 +1,5 @@
 #!/bin/bash
-mydir=$(dirname $0)
+source_dir=$( cd "$(dirname "$0")"/.. ; pwd )
 
 # install the various packages and build tools we'll need
 echo install the various packages and build tools well need
@@ -62,4 +62,6 @@ echo Install node bindings for cmake
 sudo npm install -g cmake-js
 
 # Configure abigail-device service
-sudo cp $mydir/config-files/abigail-device.service /lib/systemd/system
+# Note: the ugly bash expansion below replaces all `/` with `\/` so that sed is
+# happy.
+sudo sed "s/<SOURCEDIR>/${source_dir////\\/}/g" $source_dir/config-files/abigail-device.service.in > /lib/systemd/system/abigail-device.service
