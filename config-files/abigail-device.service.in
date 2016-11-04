@@ -10,7 +10,7 @@ StandardError=journal
 # If you delete this line, it will run as root
 #User=pi
 # Edit this line, if needed, to specify where you installed the server
-WorkingDirectory=/home/pi/abigail-device
+WorkingDirectory=<SOURCEDIR>
 # Edit this line, if needed, to set the correct path to node
 ExecStart=/usr/local/bin/node index.js
 Restart=always
