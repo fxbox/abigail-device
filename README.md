@@ -59,6 +59,12 @@ installed the prerequsites.
 
 Starting and Stopping Abigail Device
 ------------------------------------
+Make sure that the i2c interface is enabled in your Raspberry Pi installation.
+1.  |sudo raspi-config|
+2.  Advanced Options
+3.  Select I2C to Enable the automatic loading of I2C
+4.  Exit raspi-config
+
 
 Before running the client, rename the config.json.tpl to config.json
 and modify the IP of the server to an instance of the abigail voice-server.
