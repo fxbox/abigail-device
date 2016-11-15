@@ -239,7 +239,7 @@ module.exports = {
                             // that means motion was detected.
                             child = child_process.exec('node accel.js',  (error, stdout, stderr) => {
                                 if (error) {
-                                    console.error('exec error: ${error}');
+                                    console.error('exec error:', error);
                                     return;
                                 }
 
