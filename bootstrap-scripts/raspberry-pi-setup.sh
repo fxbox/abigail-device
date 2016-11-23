@@ -64,4 +64,5 @@ sudo npm install -g cmake-js
 # Configure abigail-device service
 # Note: the ugly bash expansion below replaces all `/` with `\/` so that sed is
 # happy.
-sudo sed "s/<SOURCEDIR>/${source_dir////\\/}/g" $source_dir/config-files/abigail-device.service.in > /lib/systemd/system/abigail-device.service
+sed "s/<SOURCEDIR>/${source_dir////\\/}/g" $source_dir/config-files/abigail-device.service.in > abigail-device.service
+sudo mv abigail-device.service /lib/systemd/system
